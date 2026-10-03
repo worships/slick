@@ -31,11 +31,10 @@ export type CatalogItem = {
 	src: string;
 	thumb?: string;
 	featured?: boolean;
-	source?: string;
 	kind: 'game' | 'app';
 };
 
-export const PER_PAGE = 20;
+export const perPage = 20;
 
 export const categoryIcons: Record<string, Component> = {
 	Action: Swords,

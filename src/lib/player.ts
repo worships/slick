@@ -1,6 +1,6 @@
 import type { CatalogItem } from '#lib/catalog.svelte.ts';
 
-const RUFFLE = 'https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle@0.6.0/ruffle.js';
+const ruffleUrl = 'https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle@0.6.0/ruffle.js';
 
 // Keeps a URL from closing the <script> it's embedded in.
 const jsString = (s: string) => JSON.stringify(s).replace(/</g, '\\u003c');
@@ -11,7 +11,7 @@ function ruffleDocument(swf: string) {
 <head>
 <meta charset="utf-8">
 <style>html,body{margin:0;height:100%;background:#000;overflow:hidden}ruffle-player{width:100%;height:100%;display:block}</style>
-<script src="${RUFFLE}"></script>
+<script src="${ruffleUrl}"></script>
 </head>
 <body>
 <script>

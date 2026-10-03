@@ -2,7 +2,7 @@
 	import { onMount, tick, type Component } from 'svelte';
 	import { replaceState } from '$app/navigation';
 	import { ChevronLeft, ChevronRight, Search, SearchX, Star } from '@lucide/svelte';
-	import { catalog, PER_PAGE, type CatalogItem } from '#lib/catalog.svelte.ts';
+	import { catalog, perPage, type CatalogItem } from '#lib/catalog.svelte.ts';
 	import { settings } from '#lib/settings.svelte.ts';
 	import ItemCard from './ItemCard.svelte';
 	import SkeletonGrid from './SkeletonGrid.svelte';
@@ -43,9 +43,9 @@
 		});
 	});
 
-	const totalPages = $derived(Math.max(1, Math.ceil(filtered.length / PER_PAGE)));
+	const totalPages = $derived(Math.max(1, Math.ceil(filtered.length / perPage)));
 	const current = $derived(Math.min(page, totalPages));
-	const pageItems = $derived(filtered.slice((current - 1) * PER_PAGE, current * PER_PAGE));
+	const pageItems = $derived(filtered.slice((current - 1) * perPage, current * perPage));
 
 	// 1 … 4 5 6 … 39
 	const pageList = $derived.by(() => {
@@ -155,7 +155,7 @@
 			<p class="mt-1 text-sm text-muted">Check your connection and refresh.</p>
 		</div>
 	{:else if catalog.status !== 'ready'}
-		<SkeletonGrid count={PER_PAGE} class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" />
+		<SkeletonGrid count={perPage} class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" />
 	{:else if pageItems.length}
 		<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
 			{#each pageItems as item (item.id)}

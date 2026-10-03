@@ -12,7 +12,6 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"catalog:import": "bun catalog/scripts/import.ts",
 		"catalog:validate": "bun catalog/scripts/validate.ts"
 	},
 	"devDependencies": {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { ArrowRight, Search } from '@lucide/svelte';
-	import { catalog, PER_PAGE } from '#lib/catalog.svelte.ts';
+	import { catalog, perPage } from '#lib/catalog.svelte.ts';
 	import { site } from '#lib/data/site.ts';
 	import ItemCard from '#lib/components/ItemCard.svelte';
 	import SkeletonGrid from '#lib/components/SkeletonGrid.svelte';
@@ -11,8 +11,8 @@
 
 	const ready = $derived(catalog.status === 'ready');
 	const featured = $derived(catalog.games.filter((g) => g.featured).slice(0, 6));
-	const firstPage = $derived(catalog.games.slice(0, PER_PAGE));
-	const hasMore = $derived(catalog.games.length > PER_PAGE);
+	const firstPage = $derived(catalog.games.slice(0, perPage));
+	const hasMore = $derived(catalog.games.length > perPage);
 
 	function search(e: SubmitEvent) {
 		e.preventDefault();
@@ -93,6 +93,6 @@
 	{:else if catalog.status === 'error'}
 		<p data-interactive class="text-sm text-muted">Couldn't load the games. Check your connection and refresh.</p>
 	{:else}
-		<SkeletonGrid count={PER_PAGE} class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" />
+		<SkeletonGrid count={perPage} class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" />
 	{/if}
 </section>

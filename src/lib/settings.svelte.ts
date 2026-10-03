@@ -1,6 +1,6 @@
 import { backgrounds, defaultBgOptions, type BackgroundId } from '#lib/backgrounds/index.ts';
 
-export const STORAGE_KEY = 'slick:settings';
+export const storageKey = 'slick:settings';
 
 export type OptionValue = number | boolean | string;
 
@@ -76,7 +76,7 @@ export const store = {
 	},
 	load() {
 		try {
-			const raw = localStorage.getItem(STORAGE_KEY);
+			const raw = localStorage.getItem(storageKey);
 			if (raw) Object.assign(settings, merge(defaults(), JSON.parse(raw)));
 		} catch {
 			// bad or blocked storage, keep defaults
@@ -85,7 +85,7 @@ export const store = {
 	},
 	save() {
 		try {
-			localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+			localStorage.setItem(storageKey, JSON.stringify(settings));
 		} catch {
 			// storage disabled
 		}
