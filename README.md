@@ -15,11 +15,9 @@ Settings and favorites are only saved in your browser, and are not sent to any c
 
 ## Deploy
 
-Replace `YOUR-NAME/slick` in these links with your repo first.
-
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/YOUR-NAME/slick)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR-NAME/slick)
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/YOUR-NAME/slick)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/worships/slick)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/worships/slick)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/worships/slick)
 
 **Cloudflare Pages:** fork this repo, then in Cloudflare go to Workers & Pages, Create, Pages, Connect to Git. Use `npm run build` as the build command, `build` as the output folder, and set `NODE_VERSION` to `22`.
 
@@ -32,7 +30,7 @@ If your domain gets blocked, add a new one to the same project in your host's da
 You'll need [Node.js](https://nodejs.org) 22+. The catalog scripts also need [Bun](https://bun.sh).
 
 ```sh
-git clone --recursive https://github.com/YOUR-NAME/slick.git
+git clone --recursive https://github.com/worships/slick.git
 cd slick
 bun install
 bun run dev
