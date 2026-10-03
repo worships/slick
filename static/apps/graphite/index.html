@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Graphite GX graphing calculator</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%88%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="css/calculator.css">
+</head>
+<body>
+<main class="stage">
+  <div class="calc" id="calc">
+    <div class="brand"><span class="mark">graphite</span><span class="model">GX</span></div>
+    <div class="bezel"><div class="lcdwrap"><canvas id="lcd" aria-label="Calculator screen" role="img"></canvas></div></div>
+    <div id="keys"></div>
+  </div>
+  <p class="hint">Your keyboard works too: <kbd>Enter</kbd> evaluates, <kbd>Shift</kbd>+<kbd>Enter</kbd> solves, <kbd>Esc</kbd> clears, arrows move, and <kbd>F1</kbd>–<kbd>F5</kbd> are the graph keys. In games, <kbd>Space</kbd> is 2nd and <kbd>P</kbd> pauses.</p>
+</main>
+
+<!-- Plain scripts (not modules) so the page also works when opened straight from disk.
+     Order matters: each file uses what the files above it define. -->
+<script src="js/core/tokens.js"></script>
+<script src="js/core/state.js"></script>
+<script src="js/core/numeric.js"></script>
+<script src="js/core/complex.js"></script>
+<script src="js/core/values.js"></script>
+<script src="js/core/format.js"></script>
+<script src="js/core/parser.js"></script>
+<script src="js/core/evaluator.js"></script>
+<script src="js/ui/lcd.js"></script>
+<script src="js/ui/app.js"></script>
+<script src="js/screens/home.js"></script>
+<script src="js/screens/yeq.js"></script>
+<script src="js/screens/settings.js"></script>
+<script src="js/screens/graph.js"></script>
+<script src="js/screens/table.js"></script>
+<script src="js/screens/stat.js"></script>
+<script src="js/screens/matrix.js"></script>
+<script src="js/screens/solver.js"></script>
+<script src="js/screens/form.js"></script>
+<script src="js/screens/menus.js"></script>
+<script src="js/apps/finance.js"></script>
+<script src="js/apps/polysmlt.js"></script>
+<script src="js/apps/stattests.js"></script>
+<script src="js/prgm/vm.js"></script>
+<script src="js/prgm/editor.js"></script>
+<script src="js/games/engine.js"></script>
+<script src="js/games/snake.js"></script>
+<script src="js/games/blocks.js"></script>
+<script src="js/games/mines.js"></script>
+<script src="js/games/tiles2048.js"></script>
+<script src="js/ui/keypad.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

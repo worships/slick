@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notes</title>
+<style>
+:root {
+	--accent: #818cf8;
+	--bg: #0b0b11;
+	--side: #101018;
+	--line: rgb(255 255 255 / 0.08);
+	--fg: #ececf1;
+	--muted: #9b9bab;
+	--subtle: #6b6b7b;
+	color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+	display: flex;
+	background: var(--bg);
+	color: var(--fg);
+	font: 14px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+aside {
+	display: flex;
+	flex-direction: column;
+	width: 250px;
+	flex-shrink: 0;
+	background: var(--side);
+	border-right: 1px solid var(--line);
+}
+.side-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 14px 10px; }
+.side-head h1 { margin: 0; font-size: 15px; font-weight: 600; }
+button {
+	font: inherit;
+	color: inherit;
+	border: 1px solid var(--line);
+	background: rgb(255 255 255 / 0.04);
+	border-radius: 8px;
+	padding: 5px 10px;
+	cursor: pointer;
+}
+button:hover { background: rgb(255 255 255 / 0.08); }
+button.primary { background: var(--accent); border-color: transparent; color: #0b0b12; font-weight: 600; }
+button.primary:hover { filter: brightness(1.1); }
+button.danger:hover { color: #fda4af; }
+#search {
+	margin: 0 14px 10px;
+	padding: 7px 10px;
+	border-radius: 8px;
+	border: 1px solid var(--line);
+	background: rgb(255 255 255 / 0.04);
+	color: var(--fg);
+	font: inherit;
+	outline: none;
+}
+#search:focus { border-color: var(--accent); }
+#list { flex: 1; overflow-y: auto; padding: 0 8px 12px; }
+.note {
+	display: block;
+	width: 100%;
+	text-align: left;
+	border: 0;
+	background: none;
+	border-radius: 8px;
+	padding: 8px 10px;
+	margin-bottom: 2px;
+}
+.note.active { background: color-mix(in oklab, var(--accent) 18%, transparent); }
+.note .t { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+.note .d { display: block; font-size: 12px; color: var(--subtle); }
+main { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+.bar {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 16px;
+	border-bottom: 1px solid var(--line);
+	color: var(--muted);
+	font-size: 13px;
+}
+.bar .count { margin-right: auto; }
+textarea {
+	flex: 1;
+	width: 100%;
+	padding: 20px 24px;
+	border: 0;
+	resize: none;
+	outline: none;
+	background: transparent;
+	color: var(--fg);
+	font: 15px/1.7 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+textarea::placeholder { color: var(--subtle); }
+@media (max-width: 640px) {
+	body { flex-direction: column; }
+	aside { width: 100%; max-height: 38%; border-right: 0; border-bottom: 1px solid var(--line); }
+}
+</style>
+</head>
+<body>
+<aside>
+	<div class="side-head">
+		<h1>Notes</h1>
+		<button class="primary" id="new">New</button>
+	</div>
+	<input id="search" type="search" placeholder="Search notes">
+	<div id="list"></div>
+</aside>
+<main>
+	<div class="bar">
+		<span class="count" id="count"></span>
+		<button id="download" title="Save as a .txt file">Download</button>
+		<button class="danger" id="delete">Delete</button>
+	</div>
+	<textarea id="editor" placeholder="Start typing. Notes save automatically in this browser." spellcheck="true"></textarea>
+</main>
+<script>
+(() => {
+	const KEY = 'slick-notes';
+	const $ = (id) => document.getElementById(id);
+	const editor = $('editor');
+
+	// match the site's accent color when opened inside Slick
+	try {
+		const accent = JSON.parse(localStorage.getItem('slick:settings') || '{}').accent;
+		if (accent) document.documentElement.style.setProperty('--accent', accent);
+	} catch {}
+
+	let notes = [];
+	try {
+		notes = JSON.parse(localStorage.getItem(KEY) || '[]');
+	} catch {}
+	if (!notes.length) notes = [blank()];
+	let current = notes[0].id;
+
+	function blank() {
+		return { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), text: '', updated: Date.now() };
+	}
+	const active = () => notes.find((n) => n.id === current);
+	const title = (n) => n.text.trim().split('\n')[0].slice(0, 60) || 'Untitled';
+
+	let saveTimer;
+	function save() {
+		clearTimeout(saveTimer);
+		saveTimer = setTimeout(() => {
+			try { localStorage.setItem(KEY, JSON.stringify(notes)); } catch {}
+		}, 250);
+	}
+
+	function renderList() {
+		const q = $('search').value.trim().toLowerCase();
+		const list = $('list');
+		list.textContent = '';
+		notes
+			.filter((n) => !q || n.text.toLowerCase().includes(q))
+			.sort((a, b) => b.updated - a.updated)
+			.forEach((n) => {
+				const b = document.createElement('button');
+				b.className = 'note' + (n.id === current ? ' active' : '');
+				const t = document.createElement('span');
+				t.className = 't';
+				t.textContent = title(n);
+				const d = document.createElement('span');
+				d.className = 'd';
+				d.textContent = new Date(n.updated).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+				b.append(t, d);
+				b.onclick = () => open(n.id);
+				list.append(b);
+			});
+	}
+
+	function renderCount() {
+		const text = active().text;
+		const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+		$('count').textContent = `${words} ${words === 1 ? 'word' : 'words'}, ${text.length} characters`;
+	}
+
+	function open(id) {
+		current = id;
+		editor.value = active().text;
+		renderList();
+		renderCount();
+		editor.focus();
+	}
+
+	editor.addEventListener('input', () => {
+		const n = active();
+		n.text = editor.value;
+		n.updated = Date.now();
+		save();
+		renderList();
+		renderCount();
+	});
+
+	$('new').onclick = () => {
+		const n = blank();
+		notes.push(n);
+		save();
+		open(n.id);
+	};
+
+	$('delete').onclick = () => {
+		const n = active();
+		if (n.text.trim() && !confirm(`Delete "${title(n)}"?`)) return;
+		notes = notes.filter((x) => x.id !== n.id);
+		if (!notes.length) notes.push(blank());
+		save();
+		open(notes.sort((a, b) => b.updated - a.updated)[0].id);
+	};
+
+	$('download').onclick = () => {
+		const n = active();
+		const a = document.createElement('a');
+		a.href = URL.createObjectURL(new Blob([n.text], { type: 'text/plain' }));
+		a.download = title(n).replace(/[\\/:*?"<>|]+/g, '').slice(0, 40) + '.txt';
+		a.click();
+		URL.revokeObjectURL(a.href);
+	};
+
+	$('search').addEventListener('input', renderList);
+
+	editor.addEventListener('keydown', (e) => {
+		if (e.key !== 'Tab') return;
+		e.preventDefault();
+		editor.setRangeText('\t', editor.selectionStart, editor.selectionEnd, 'end');
+		editor.dispatchEvent(new Event('input'));
+	});
+
+	open(current);
+})();
+</script>
+</body>
+</html>
