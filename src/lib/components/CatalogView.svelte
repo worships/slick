@@ -99,9 +99,6 @@
 <section class="mx-auto max-w-7xl px-4 pt-28 pb-10 sm:px-6">
 	<div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
 		<div data-interactive>
-			<div class="mb-4 grid size-11 place-items-center rounded-2xl border border-accent/30 bg-accent/12 text-accent">
-				<Icon class="size-5" />
-			</div>
 			<h1 class="font-display text-4xl font-semibold tracking-tight text-fg sm:text-5xl">{title}</h1>
 			<p class="mt-2 max-w-xl text-muted">{description}</p>
 		</div>
