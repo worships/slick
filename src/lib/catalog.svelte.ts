@@ -31,6 +31,8 @@ export type CatalogItem = {
 	src: string;
 	thumb?: string;
 	featured?: boolean;
+	// split files and how many pieces each has, relative to src's folder
+	parts?: Record<string, number>;
 	kind: 'game' | 'app';
 };
 
@@ -72,8 +74,17 @@ export async function loadCatalog() {
 		const res = await fetch(site.catalogUrl || '/catalog.json');
 		if (!res.ok) throw new Error(`${res.status}`);
 		const data = await res.json();
-		catalog.games = (data.games ?? []).map((g: CatalogItem) => ({ ...g, kind: 'game' }));
-		catalog.apps = (data.apps ?? []).map((a: CatalogItem) => ({ ...a, kind: 'app' }));
+		// files stored in the catalog repo are served from /catalog/ here, or from wherever catalogUrl points
+		const base = site.catalogUrl ? new URL('.', site.catalogUrl) : new URL('/catalog/', location.origin);
+		const resolve = (path?: string) => (path && !/^(https?:|\/)/i.test(path) ? new URL(path, base).href : path);
+		const load = (kind: CatalogItem['kind']) => (item: CatalogItem) => ({
+			...item,
+			src: resolve(item.src)!,
+			thumb: resolve(item.thumb),
+			kind
+		});
+		catalog.games = (data.games ?? []).map(load('game'));
+		catalog.apps = (data.apps ?? []).map(load('app'));
 		catalog.status = 'ready';
 	} catch (e) {
 		console.error('Could not load the catalog', e);

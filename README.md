@@ -61,6 +61,8 @@ Set `type` to `url` for a normal web page, `html` for an `index.html` hosted on 
 
 Apps can also be hosted by the site itself: put them in `static/apps/<name>/index.html` and use `/apps/<name>/index.html` as the `src`.
 
+Games can be stored in the catalog repo too, so they don't depend on anyone else's site. See the [catalog README](catalog/README.md) for how.
+
 To update the catalog without redeploying, set `catalogUrl` in `src/lib/data/site.ts` to its jsDelivr link, like `https://cdn.jsdelivr.net/gh/YOUR-NAME/slick-catalog@main/games.json`.
 
 ## Credits
