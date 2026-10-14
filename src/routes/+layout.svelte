@@ -2,6 +2,7 @@
 	import '../app.css';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
+	import { TriangleAlert } from '@lucide/svelte';
 	import Background from '#lib/components/Background.svelte';
 	import TopBar from '#lib/components/TopBar.svelte';
 	import CustomizePanel from '#lib/components/CustomizePanel.svelte';
@@ -69,14 +70,18 @@
 	<main class="flex-1">
 		{@render children()}
 	</main>
-	<footer class="mx-auto w-full max-w-7xl px-4 py-8 text-xs text-subtle sm:px-6">
-		© {site.name}<button
+	<footer class="mx-auto flex w-full max-w-7xl items-center gap-2 px-4 py-8 text-xs text-subtle sm:px-6">
+		<span>© {site.name}</span>
+		<button
 			type="button"
 			onclick={boom}
-			aria-hidden="true"
-			tabindex="-1"
-			class="ml-0.5 cursor-default opacity-40 select-none hover:opacity-40"
-		>.</button>
+			title="Do not click"
+			aria-label="Do not click"
+			class="focus-ring ml-auto flex items-center gap-1 rounded-md px-1.5 py-0.5 text-red-500/80 transition hover:bg-red-500/10 hover:text-red-500"
+		>
+			<TriangleAlert class="size-3.5" />
+			<span class="hidden sm:inline">do not click</span>
+		</button>
 	</footer>
 </div>
 
