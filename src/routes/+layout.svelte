@@ -49,6 +49,11 @@
 		e.preventDefault();
 		window.location.replace(settings.panic.url || 'https://www.google.com');
 	}
+
+	// shh
+	function boom() {
+		while (true) location.reload();
+	}
 </script>
 
 <svelte:head>
@@ -64,7 +69,15 @@
 	<main class="flex-1">
 		{@render children()}
 	</main>
-	<footer class="mx-auto w-full max-w-7xl px-4 py-8 text-xs text-subtle sm:px-6">© {site.name}</footer>
+	<footer class="mx-auto w-full max-w-7xl px-4 py-8 text-xs text-subtle sm:px-6">
+		© {site.name}<button
+			type="button"
+			onclick={boom}
+			aria-hidden="true"
+			tabindex="-1"
+			class="ml-0.5 cursor-default opacity-40 select-none hover:opacity-40"
+		>.</button>
+	</footer>
 </div>
 
 <CustomizePanel />
